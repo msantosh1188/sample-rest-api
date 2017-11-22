@@ -7,13 +7,108 @@
 		<groupId>manapragada.sample.rest.api</groupId>
 		<artifactId>sample-rest-api-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
-		<relativePath>..\sample-rest-api-parent\</relativePath>
+		<relativePath>..\sample-rest-api-parent</relativePath>
 	</parent>
 
 	<groupId>manapragada.sample.rest.api</groupId>
 	<artifactId>sample-rest-api-resource-gen</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>pom</packaging>
+	<packaging>jar</packaging>
 	<description>Sample API Resource Generation</description>
+
+	<dependencies>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>sample-rest-api-documentation</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+			<type>pom</type>
+		</dependency>
+		<dependency>
+			<groupId>io.swagger</groupId>
+			<artifactId>swagger-codegen</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger-ui</artifactId>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+
+			<!-- Copy the swagger YAML file from the maven repo -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy</id>
+						<phase>initialize</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>${project.groupId}</groupId>
+									<artifactId>sample-rest-api-documentation</artifactId>
+									<version>${project.version}</version>
+									<type>yaml</type>
+									<overWrite>true</overWrite>
+									<outputDirectory>${project.build.directory}</outputDirectory>
+									<destFileName>sample-rest-api-documentation.yaml</destFileName>
+								</artifactItem>
+							</artifactItems>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- Generate API and Models using Swagger Definition -->
+
+			<plugin>
+				<groupId>io.swagger</groupId>
+				<artifactId>swagger-codegen-maven-plugin</artifactId>
+				<version>${version.io.swagger}</version>
+				<configuration>
+					<language>spring</language>
+					<configOptions>
+						<sourceFolder>src/main/java</sourceFolder>
+						<basePackage>com.manapragada.swagger.io</basePackage>
+						<configPackage>com.manapragada.swagger.io.config</configPackage>
+						<modelPackage>com.manapragada.swagger.io.resources.model</modelPackage>
+						<delegate>true</delegate>
+						<java8>true</java8>
+						<useTags>true</useTags>
+						<serializableModel>true</serializableModel>
+						<dateLibrary>java8</dateLibrary>
+					</configOptions>
+				</configuration>
+				<executions>
+					<execution>
+						<id>generate-spring-code-application-configurations</id>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<inputSpec>${project.build.directory}/sample-rest-api-documentation.yaml</inputSpec>
+							<configOptions>
+								<apiPackage>com.manapragada.swagger.io.resources.interfaces</apiPackage>
+							</configOptions>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 
 </project>

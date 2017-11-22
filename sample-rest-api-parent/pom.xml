@@ -22,6 +22,8 @@
 		<version.io.swagger>2.2.3</version.io.swagger>
 		<version.swagger2markup>1.2.0</version.swagger2markup>
 		<version.asciidoc>1.5.3</version.asciidoc>
+		<version.org.springframework.boot>1.5.8.RELEASE</version.org.springframework.boot>
+		<springfox-version>2.6.1</springfox-version>
 	</properties>
 
 	<dependencyManagement>
@@ -29,6 +31,40 @@
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-starter-web</artifactId>
+				<version>${version.org.springframework.boot}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-tomcat</artifactId>
+				<version>${version.org.springframework.boot}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>io.github.swagger2markup</groupId>
+				<artifactId>swagger2markup-import-files-ext</artifactId>
+				<version>${version.swagger2markup}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.github.swagger2markup</groupId>
+				<artifactId>swagger2markup-spring-restdocs-ext</artifactId>
+				<version>${version.swagger2markup}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.swagger</groupId>
+				<artifactId>swagger-codegen</artifactId>
+				<version>${version.io.swagger}</version>
+				<scope>provided</scope>
+			</dependency>
+			<!--SpringFox dependencies -->
+			<dependency>
+				<groupId>io.springfox</groupId>
+				<artifactId>springfox-swagger2</artifactId>
+				<version>${springfox-version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.springfox</groupId>
+				<artifactId>springfox-swagger-ui</artifactId>
+				<version>${springfox-version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

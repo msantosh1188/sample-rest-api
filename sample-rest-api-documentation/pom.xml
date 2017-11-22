@@ -29,12 +29,10 @@
 		<dependency>
 			<groupId>io.github.swagger2markup</groupId>
 			<artifactId>swagger2markup-import-files-ext</artifactId>
-			<version>${version.swagger2markup}</version>
 		</dependency>
 		<dependency>
 			<groupId>io.github.swagger2markup</groupId>
 			<artifactId>swagger2markup-spring-restdocs-ext</artifactId>
-			<version>${version.swagger2markup}</version>
 		</dependency>
 	</dependencies>
 
