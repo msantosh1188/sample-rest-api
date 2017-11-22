@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>manapragada.sample.rest.api</groupId>
+	<artifactId>sample-rest-api-reactor</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<description>Sample API</description>
+
+	<modules>
+		<module>sample-rest-api-parent</module>
+		<module>sample-rest-api-clientkit</module>
+		<module>sample-rest-api-documentation</module>
+		<module>sample-rest-api-resource-gen</module>
+	</modules>
+
+</project>
