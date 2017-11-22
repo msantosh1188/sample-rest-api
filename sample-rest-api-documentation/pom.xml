@@ -16,4 +16,124 @@
 	<packaging>pom</packaging>
 	<description>Sample API Documentation</description>
 
+	<properties>
+		<swagger.file.location>${basedir}/src/main/resources/swagger/sample-rest-api.yaml</swagger.file.location>
+		<generated.asciidoc.directory>${project.build.directory}/ascii/generated</generated.asciidoc.directory>
+		<asciidoctor.input.directory>${basedir}/src/main/resources/docs</asciidoctor.input.directory>
+		<asciidoctor.html.output.directory>${project.build.directory}/ascii/html</asciidoctor.html.output.directory>
+		<maven.build.timestamp.format>yyyy-MM-dd HH</maven.build.timestamp.format>
+		<adoc.file>SampleRestAPI</adoc.file>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>io.github.swagger2markup</groupId>
+			<artifactId>swagger2markup-import-files-ext</artifactId>
+			<version>${version.swagger2markup}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.github.swagger2markup</groupId>
+			<artifactId>swagger2markup-spring-restdocs-ext</artifactId>
+			<version>${version.swagger2markup}</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<!--  Generate ASCII Files for each Swagger Definition -->
+			<plugin>
+				<groupId>io.github.swagger2markup</groupId>
+				<artifactId>swagger2markup-maven-plugin</artifactId>
+				<version>${version.swagger2markup}</version>
+				<configuration>
+					<config>
+						<swagger2markup.markupLanguage>ASCIIDOC</swagger2markup.markupLanguage>
+						<swagger2markup.generatedExamplesEnabled>true</swagger2markup.generatedExamplesEnabled>
+						<swagger2markup.anchorPrefix>SC_</swagger2markup.anchorPrefix>
+					</config>
+				</configuration>
+				<executions>
+					<execution>
+						<id>ascii</id>
+						<phase>test</phase>
+						<goals>
+							<goal>convertSwagger2markup</goal>
+						</goals>
+						<configuration>
+							<swaggerInput>${swagger.file.location}</swaggerInput>
+							<outputDir>${generated.asciidoc.directory}</outputDir>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- Create HTML Documents for each Swagger Definition -->
+
+			<plugin>
+				<groupId>org.asciidoctor</groupId>
+				<artifactId>asciidoctor-maven-plugin</artifactId>
+				<version>${version.asciidoc}</version>
+				<configuration>
+					<sourceDirectory>${asciidoctor.input.directory}</sourceDirectory>
+					<sourceDocumentName>${adoc.file}.adoc</sourceDocumentName>
+				</configuration>
+				<executions>
+					<execution>
+						<id>html</id>
+						<phase>test</phase>
+						<goals>
+							<goal>process-asciidoc</goal>
+						</goals>
+						<configuration>
+							<backend>html5</backend>
+							<title>Product Offering Price</title>
+							<outputDirectory>${asciidoctor.html.output.directory}</outputDirectory>
+							<attributes>
+								<doctype>book</doctype>
+								<toc>left</toc>
+								<toclevels>3</toclevels>
+								<numbered></numbered>
+								<hardbreaks></hardbreaks>
+								<sectlinks></sectlinks>
+								<sectanchors></sectanchors>
+								<generated>${generated.asciidoc.directory}</generated>
+								<revnumber>${project.version}</revnumber>
+								<revdate>${maven.build.timestamp}</revdate>
+								<organization>${project.organization.name}</organization>
+							</attributes>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- Uploading HTML and yaml to Nexus -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-artifacts</id>
+						<phase>package</phase>
+						<goals>
+							<goal>attach-artifact</goal>
+						</goals>
+						<configuration>
+							<artifacts>
+								<!-- Push the API to maven repo. -->
+								<artifact>
+									<file>${swagger.file.location}</file>
+									<type>yaml</type>
+								</artifact>
+								<!-- Push the generated html to maven repo. -->
+								<artifact>
+									<file>${asciidoctor.html.output.directory}/${adoc.file}.html</file>
+									<type>html</type>
+								</artifact>
+							</artifacts>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
 </project>
